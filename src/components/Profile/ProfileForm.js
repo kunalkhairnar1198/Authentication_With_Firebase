@@ -22,7 +22,8 @@ const ProfileForm = () => {
         'Content-Type':'application/json',
       }
     }).then((res)=>{
-      console.log(res) 
+      alert('succesfully changed Password', res.ok)
+      // console.log(res) 
     } )
   }
 
