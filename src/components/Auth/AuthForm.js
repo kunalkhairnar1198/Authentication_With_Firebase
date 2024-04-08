@@ -1,60 +1,58 @@
 import { useState, useRef } from 'react';
-
 import classes from './AuthForm.module.css';
 
 const AuthForm = () => {
   const [isLogin, setIsLogin] = useState(true);
-  const [isLoading, setIsLoading]= useState(false)
-  const emailRef = useRef('')
-  const pswRef = useRef('')
+  const [isLoading, setIsLoading] = useState(false);
+  const emailRef = useRef(null);
+  const pswRef = useRef(null);
 
   const switchAuthModeHandler = () => {
     setIsLogin((prevState) => !prevState);
   };
 
-  const submitHandler =(e)=>{
-    e.preventDefault()
+  const submitHandler = (e) => {
+    e.preventDefault();
 
     const enteredEmail = emailRef.current.value;
-    const enterdPassword = pswRef.current.value;
-  
+    const enteredPassword = pswRef.current.value;
 
-    setIsLoading(true)
+    setIsLoading(true);
 
-    if(isLogin){
-
-    }else{
-       fetch('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAhvNVuowUtmbbRdMqap6VS3S9Lz68mA4Y',{
-            method: 'POST',
-            body:JSON.stringify({
-              email:enteredEmail,
-              password:enterdPassword,
-              returnSecureToken:true
-            }),
-            headers: {
-              'Content-Type': 'application/json'
-            }
-          })
-          .then((res) =>{
-
-            setIsLoading(false)
-            
-            if(res.ok){
-                  //...sucess
-                }else{
-                  return res.json().then((data) =>{
-                    //Show error modal 
-                    let errorMessage = 'Authentication Failed';
-                        // if(data && data.error && data.error.message){
-                        // errorMessage = data.error.message;
-                        //   console.log('singup failed',data)
-                        // }
-                        alert(errorMessage)
-                  })
-                }
-             })
+    let url = '';
+    if (isLogin) {
+      url = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAhvNVuowUtmbbRdMqap6VS3S9Lz68mA4Y';
+    } else {
+      url = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAhvNVuowUtmbbRdMqap6VS3S9Lz68mA4Y';
     }
-  }
+
+    fetch(url, {
+      method: 'POST',
+      body: JSON.stringify({
+        email: enteredEmail,
+        password: enteredPassword,
+        returnSecureToken: true
+      }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then((res) => {
+        setIsLoading(false);
+        if (res.ok) {
+          return res.json();
+        } else {
+          throw new Error('Authentication failed.');
+        }
+      })
+      .then((data) => {
+        console.log('Login Successfull',data);
+        // Handle successful authentication, e.g., redirect to another page
+      })
+      .catch((error) => {
+        alert(error.message);
+      });
+  };
 
   return (
     <section className={classes.auth}>
@@ -74,7 +72,7 @@ const AuthForm = () => {
           />
         </div>
         <div className={classes.actions}>
-          {!isLoading && <button>{isLogin ? 'Login': 'Create Account'}</button>}
+          {!isLoading && <button>{isLogin ? 'Login' : 'Create Account'}</button>}
           {isLoading && <p>Sending request....</p>}
           <button
             type='button'
