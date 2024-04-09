@@ -10,7 +10,7 @@ const MainNavigation = () => {
   const isLoggedIn  = isLogedIn
 
   const onlogOutHandler =()=>{
-    console.log('DESTROY')
+    console.log('USER LOGOUT')
     logout()
   }
 
