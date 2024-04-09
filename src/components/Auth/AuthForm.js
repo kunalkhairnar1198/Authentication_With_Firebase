@@ -53,6 +53,7 @@ const AuthForm = () => {
       })
       .then((data) => {
         console.log('Login Successfull',data.idToken);
+        alert('LOGIN SUCCESFULL')
         authCtx.login(data.idToken)
         history.replace('/')
         // Handle successful authentication, e.g., redirect to another page
