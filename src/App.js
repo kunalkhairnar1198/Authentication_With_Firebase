@@ -17,15 +17,15 @@ const authCtx =  useContext(AuthContext)
           <HomePage />
         </Route>
         {!authCtx.isLogedIn &&(
-         <Route path='/auth'>
+        <Route path='/auth'>
           <AuthPage />
         </Route>
         )}
-        {authCtx.isLogedIn && (
+        {/* make dynmaic routes if the user is logedin then redirect userProfile Login page if your are loggedin to render profile page other else render second condition redirect the login page*/}
         <Route path='/profile'>
-          <UserProfile />
+          {authCtx.isLogedIn && ( <UserProfile /> )}   
+          {!authCtx.isLogedIn &&(<Redirect to='/auth' />)}
         </Route>
-      )}
         <Route path='*'>
           <Redirect to='/' />
         </Route>
