@@ -1,10 +1,12 @@
 import { useContext, useRef } from 'react';
 import classes from './ProfileForm.module.css';
 import { AuthContext } from '../Store/AuthContext';
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 
 const ProfileForm = () => {
   const passwordRef = useRef()
   const {token} = useContext(AuthContext)
+  const navigate = useHistory()
 
   const ChangePassword =(e)=>{
     e.preventDefault()
@@ -22,6 +24,7 @@ const ProfileForm = () => {
         'Content-Type':'application/json',
       }
     }).then((res)=>{
+      navigate.replace('/')
       alert('succesfully changed Password', res.ok)
       // console.log(res) 
     } )

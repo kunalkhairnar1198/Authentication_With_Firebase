@@ -1,6 +1,7 @@
 import { useState, useRef, useContext } from 'react';
 import classes from './AuthForm.module.css';
 import { AuthContext } from '../Store/AuthContext';
+import { useHistory } from 'react-router-dom';
 
 const AuthForm = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -8,6 +9,8 @@ const AuthForm = () => {
   const emailRef = useRef(null);
   const pswRef = useRef(null);
   const authCtx = useContext(AuthContext)
+  const history = useHistory()
+
   console.log(authCtx)
 
   const switchAuthModeHandler = () => {
@@ -51,6 +54,7 @@ const AuthForm = () => {
       .then((data) => {
         console.log('Login Successfull',data.idToken);
         authCtx.login(data.idToken)
+        history.replace('/')
         // Handle successful authentication, e.g., redirect to another page
       })
       .catch((error) => {
